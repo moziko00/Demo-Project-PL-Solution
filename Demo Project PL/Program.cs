@@ -20,7 +20,8 @@ namespace Demo_Project_PL
 
 
 
-            builder.Services.AddScoped<IDepartmentReposatory, DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentReposatory, DepartmentRepository>(); // This is Dependancy Injecation
+            builder.Services.AddScoped<IEmployeeReposatory, EmployeeRepository>(); 
 
             var app = builder.Build();
 

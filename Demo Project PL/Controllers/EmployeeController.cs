@@ -1,21 +1,20 @@
 ﻿using Demo_Project_BLL.Interfaces;
-using Demo_Project_BLL.Repositories;
 using Demo_Project_DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo_Project_PL.Controllers
 {
-    public class DepartmentController : Controller
+    public class EmployeeController : Controller
     {
-        private IDepartmentReposatory _departmentRepository;
-        public DepartmentController(IDepartmentReposatory departmentRepository) // ANY Object implemment This Interface
+        private IEmployeeReposatory _employeeRepository;
+        public EmployeeController(IEmployeeReposatory employeeReposatory) // ANY Object implemment This Interface
         {
-            _departmentRepository = departmentRepository;
+            _employeeRepository = employeeReposatory;
         }
         public IActionResult Index()
         {
-            var departments = _departmentRepository.GetAll();
-            return View(departments);
+            var employee = _employeeRepository.GetAll();
+            return View(employee);
         }
         //[HttpGet]
         public IActionResult Create()
@@ -25,97 +24,97 @@ namespace Demo_Project_PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Department department)
+        public IActionResult Create(Employee Employee)
         {
             if (ModelState.IsValid) // Server Side Validation
             {
-                _departmentRepository.Add(department);
+                _employeeRepository.Add(Employee);
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(Employee);
         }
 
-        //Department/details/10
-        public IActionResult Details(int? id , string ViewName="Details")
+        //Employee/details/10
+        public IActionResult Details(int? id, string ViewName = "Details")
         {
             if (id == null)
                 return NotFound();
-            var department = _departmentRepository.Get(id.Value);
-            if (department == null)
+            var employee = _employeeRepository.Get(id.Value);
+            if (employee == null)
                 return NotFound();
-            return View(ViewName,department);
+            return View(ViewName, employee);
         }
         [HttpGet]
-        //Department/Edit/id
+        //Employee/Edit/id
         public IActionResult Edit(int? id)
         {
             ///if (id == null)
             ///    return BadRequest();
-            ///var department = _departmentRepository.Get(id.Value);
-            ///if (department == null)
+            ///var Employee = _EmployeeRepository.Get(id.Value);
+            ///if (Employee == null)
             ///    return BadRequest();
-            ///return View(department);
-            
-            return Details(id,"Edit");
+            ///return View(Employee);
+
+            return Details(id, "Edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id,Department department)
+        public IActionResult Edit([FromRoute] int id, Employee employee)
         {
-            if (id != department.Id)
+            if (id != employee.Id)
                 return BadRequest();
             if (ModelState.IsValid) // Server Side Validation
             {
                 try
                 {
-                    _departmentRepository.Update(department);
+                    _employeeRepository.Update(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
                     // 1. log Exception
                     // 2. Friendly Message
-                    
+
                     ModelState.AddModelError(string.Empty, ex.Message); // Not Frindely  Message
-                    //return View(department);
+                    //return View(Employee);
                 }
             }
 
-            return View(department);
+            return View(employee);
         }
-        // Department/Delete/id
-        // Department/Delete/
+        // Employee/Delete/id
+        // Employee/Delete/
         //[HttpGet]
         public IActionResult Delete(int? id)
         {
             //if (id == null)
             //    return BadRequest();
-            //var department = _departmentRepository.Get(id.Value);
-            //if (department == null)
+            //var Employee = _EmployeeRepository.Get(id.Value);
+            //if (Employee == null)
             //    return BadRequest();
-            //return View(department);
+            //return View(Employee);
             return Details(id, "Delete");
         }
         //[HttpDelete]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int id,Department department)
+        public IActionResult Delete([FromRoute] int id, Employee employee)
         {
-            if (id !=department.Id)
+            if (id != employee.Id)
             {
                 return BadRequest();
             }
             try
             {
-                _departmentRepository.Delete(department);
+                _employeeRepository.Delete(employee);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 // 1. Log Error
                 // 2. Frindly Message
-                ModelState.AddModelError(string.Empty,ex.Message);
-                return View(department);
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(employee);
             }
         }
     }
